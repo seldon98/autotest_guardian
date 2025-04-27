@@ -1,0 +1,124 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.2, pytest-8.3.5, pluggy-1.5.0 -- D:\seldon\PyProjectRoom\0406\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+metadata: {'Python': '3.13.2', 'Platform': 'Windows-11-10.0.26100-SP0', 'Packages': {'pytest': '8.3.5', 'pluggy': '1.5.0'}, 'Plugins': {'allure-pytest': '2.14.0', 'html': '4.1.1', 'metadata': '3.1.1', 'testreport': '1.1.6', 'yaml': '1.2.1'}, 'JAVA_HOME': 'D:\\ProgramData\\JAVA\\jdk-24'}
+rootdir: D:\seldon\PyProjectRoom\0406
+configfile: pytest.ini
+plugins: allure-pytest-2.14.0, html-4.1.1, metadata-3.1.1, testreport-1.1.6, yaml-1.2.1
+collecting ... collected 18 items
+
+case/wm630/test_case_1.py::TestCase1::test_execution[Login test0] PASSED [  5%]
+case/wm630/test_case_1.py::TestCase1::test_execution[Login test1] PASSED [ 11%]
+case/wm630/test_case_1.py::TestCase1::test_execution[Payment test0] PASSED [ 16%]
+case/wm630/test_case_1.py::TestCase1::test_execution[Payment test1] PASSED [ 22%]
+case/wm630/test_case_1.py::TestCase1::test_execution[Payment test2] PASSED [ 27%]
+case/wm630/test_case_1.py::TestCase1::test_execution[Search test] PASSED [ 33%]
+case/wm630/test_case_2.py::TestCase2::test_execution[Login test0] PASSED [ 38%]
+case/wm630/test_case_2.py::TestCase2::test_execution[Login test1] 
+-------------------------------- live log call --------------------------------
+ERROR    root:test_case_2.py:18 case 2 test failed
+FAILED                                                                   [ 44%]
+case/wm630/test_case_2.py::TestCase2::test_execution[Payment test0] PASSED [ 50%]
+case/wm630/test_case_2.py::TestCase2::test_execution[Payment test1] 
+-------------------------------- live log call --------------------------------
+ERROR    root:test_case_2.py:18 case 2 test failed
+FAILED                                                                   [ 55%]
+case/wm630/test_case_2.py::TestCase2::test_execution[Payment test2] PASSED [ 61%]
+case/wm630/test_case_2.py::TestCase2::test_execution[Search test] PASSED [ 66%]
+case/wm630/test_case_3.py::TestCase3::test_execution[Login test0] PASSED [ 72%]
+case/wm630/test_case_3.py::TestCase3::test_execution[Login test1] PASSED [ 77%]
+case/wm630/test_case_3.py::TestCase3::test_execution[Payment test0] PASSED [ 83%]
+case/wm630/test_case_3.py::TestCase3::test_execution[Payment test1] PASSED [ 88%]
+case/wm630/test_case_3.py::TestCase3::test_execution[Payment test2] PASSED [ 94%]
+case/wm630/test_case_3.py::TestCase3::test_execution[Search test] PASSED [100%]
+
+================================== FAILURES ===================================
+____________________ TestCase2.test_execution[Login test1] ____________________
+
+self = <test_case_2.TestCase2 object at 0x0000023D596A0550>
+case_config = {'desc': 'Login test', 'loop': 2, 'module': <module 'case.wm630.test_case_1' from 'D:\\seldon\\PyProjectRoom\\0406\\case\\wm630\\test_case_1.py'>, 'name': 'test_case_1'}
+
+    @pytest.mark.usefixtures("allure_metadata")
+    def test_execution(self, case_config):
+>       self.run_test(case_config['loop'])
+
+case\wm630\test_case_2.py:10: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_case_2.TestCase2 object at 0x0000023D596A0550>, iteration = 2
+
+    @allure.step("执行支付测试")
+    def run_test(self, iteration):
+        with allure.step(f"第{iteration}次支付操作"):
+            print(f"执行test_case_2的第{iteration}次迭代")
+            allure.attach("交易数据", "金额: 100\n货币: CNY")
+            if iteration % 2 ==0 :
+                logging.error('case 2 test failed')
+>           assert iteration % 2 != 0  # 故意让偶数次迭代失败
+E           assert (2 % 2) != 0
+
+case\wm630\test_case_2.py:19: AssertionError
+---------------------------- Captured stdout call -----------------------------
+执行test_case_2的第2次迭代
+------------------------------ Captured log call ------------------------------
+ERROR    root:test_case_2.py:18 case 2 test failed
+___________________ TestCase2.test_execution[Payment test1] ___________________
+
+self = <test_case_2.TestCase2 object at 0x0000023D595A2650>
+case_config = {'desc': 'Payment test', 'loop': 2, 'module': <module 'case.wm630.test_case_2' from 'D:\\seldon\\PyProjectRoom\\0406\\case\\wm630\\test_case_2.py'>, 'name': 'test_case_2'}
+
+    @pytest.mark.usefixtures("allure_metadata")
+    def test_execution(self, case_config):
+>       self.run_test(case_config['loop'])
+
+case\wm630\test_case_2.py:10: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_case_2.TestCase2 object at 0x0000023D595A2650>, iteration = 2
+
+    @allure.step("执行支付测试")
+    def run_test(self, iteration):
+        with allure.step(f"第{iteration}次支付操作"):
+            print(f"执行test_case_2的第{iteration}次迭代")
+            allure.attach("交易数据", "金额: 100\n货币: CNY")
+            if iteration % 2 ==0 :
+                logging.error('case 2 test failed')
+>           assert iteration % 2 != 0  # 故意让偶数次迭代失败
+E           assert (2 % 2) != 0
+
+case\wm630\test_case_2.py:19: AssertionError
+---------------------------- Captured stdout call -----------------------------
+执行test_case_2的第2次迭代
+------------------------------ Captured log call ------------------------------
+ERROR    root:test_case_2.py:18 case 2 test failed
+============================== warnings summary ===============================
+.venv\Lib\site-packages\_pytest\config\__init__.py:1500
+  D:\seldon\PyProjectRoom\0406\.venv\Lib\site-packages\_pytest\config\__init__.py:1500: PytestConfigWarning: No files were found in testpaths; consider removing or adjusting your testpaths configuration. Searching recursively from the current directory instead.
+    self.args, self.args_source = self._decide_args(
+
+.venv\Lib\site-packages\_pytest\config\__init__.py:1441
+  D:\seldon\PyProjectRoom\0406\.venv\Lib\site-packages\_pytest\config\__init__.py:1441: PytestConfigWarning: Unknown config option: result_log_enable
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+.venv\Lib\site-packages\_pytest\config\__init__.py:1441
+  D:\seldon\PyProjectRoom\0406\.venv\Lib\site-packages\_pytest\config\__init__.py:1441: PytestConfigWarning: Unknown config option: result_log_level_separator
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+.venv\Lib\site-packages\_pytest\config\__init__.py:1441
+  D:\seldon\PyProjectRoom\0406\.venv\Lib\site-packages\_pytest\config\__init__.py:1441: PytestConfigWarning: Unknown config option: result_log_level_verbose
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+.venv\Lib\site-packages\_pytest\config\__init__.py:1441
+  D:\seldon\PyProjectRoom\0406\.venv\Lib\site-packages\_pytest\config\__init__.py:1441: PytestConfigWarning: Unknown config option: result_log_separator
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED case/wm630/test_case_2.py::TestCase2::test_execution[Login test1] - as...
+FAILED case/wm630/test_case_2.py::TestCase2::test_execution[Payment test1] - ...
+================== 2 failed, 16 passed, 5 warnings in 0.17s ===================
+Report successfully generated to reports

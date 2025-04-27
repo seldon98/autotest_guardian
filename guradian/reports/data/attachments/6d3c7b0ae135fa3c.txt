@@ -1,0 +1,2 @@
+[31m[1mERROR   [0m root:test_case_3.py:24 not obtain devices
+[31m[1mERROR   [0m root:test_case_3.py:16 test faile
