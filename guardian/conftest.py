@@ -54,7 +54,7 @@ def pytest_configure(config):
 def product_config(request):
     """加载产品配置"""
     product = request.config.getoption("--product")
-    config_path = f"D:\\Jenkins\\SWS_Git\\guradian\\plan\\{product}\\device.yaml"
+    config_path = f"D:\\Jenkins\\SWS_Git\\guardian\\plan\\{product}\\device.yaml"
     try:
         with open(config_path, 'r', encoding='utf-8') as f:
             return yaml.safe_load(f)
