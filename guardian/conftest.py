@@ -137,7 +137,7 @@ def pytest_generate_tests(metafunc):
 
             config_path = os.path.join(
                 os.path.dirname(__file__),
-                f'D:\\Jenkins\\SWS_Git\\guradian\\plan\\{product}\\{module}.yaml'
+                f'D:\\Jenkins\\SWS_Git\\guardian\\plan\\{product}\\{module}.yaml'
             )
 
             with open(config_path, 'r', encoding='utf-8') as f:
