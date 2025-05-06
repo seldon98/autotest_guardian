@@ -6,7 +6,7 @@ from common.CmdShell import CommandExecutor
 import logging
 
 class TestCase3:
-    @pytest.mark.usefixtures("allure_metadata")
+
     def test_execution(self, case_config):
         self.cmd = CommandExecutor()
 

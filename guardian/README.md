@@ -53,4 +53,26 @@ test_cases:
     description: "This is a test case for TestCase3"
     product: wm630
 
-
+目录结构说明
+.
+├── case/               # 测试用例目录
+│   └── {产品代号}/      # 产品目录（如 wm630）
+│       └── {模块名}/    # 模块目录（如 reboot）
+│           └── test_*.py  # pytest 测试文件（以 test_ 开头）
+│
+├── common/             # 公共类库
+│   └── plan/           # 产品级公共配置或工具
+│       └── {产品代号}/  # 按产品分类（如 wm630）
+│
+├── plan/               # 测试计划与设备配置
+│   └── {产品代号}/      # 产品目录（如 wm630）
+│       ├── device.yaml   # 设备基础信息（串口、波特率等）
+│       └── {测试计划名}.yaml  # 测试计划配置（如 smoke.yaml）
+│
+├── logs/               # 测试日志（按日期或会话自动生成）
+├── temps/              # 临时文件（如中间状态 JSON）
+├── reports/            # Allure 测试报告（HTML 格式）
+│
+├── run.py              # 框架主入口，支持命令行参数
+├── conftest.py         # 全局 pytest 配置（Fixture、插件）
+└── pytest.ini          # 项目级 pytest 默认参数

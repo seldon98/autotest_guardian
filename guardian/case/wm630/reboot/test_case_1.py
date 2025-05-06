@@ -3,7 +3,6 @@ import pytest
 
 
 class TestCase1:
-    @pytest.mark.usefixtures("allure_metadata")
     def test_execution(self, case_config):
         self.run_test(case_config['loop'])
 
