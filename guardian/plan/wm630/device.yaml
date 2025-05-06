@@ -1,6 +1,0 @@
-product: 'wm630'
-serial_port: COM11
-baud_rate: 9600
-parity: N
-data_bits: 8
-stop_bits: 1
