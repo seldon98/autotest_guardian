@@ -54,7 +54,7 @@ def pytest_configure(config):
 def product_config(request):
     """加载产品配置"""
     product = request.config.getoption("--product")
-    config_path = f"D:\\Jenkins\\SWS_Git\\guardian\\plan\\{product}\\device.yaml"
+    config_path = f"E:\\Jenkins\\SWS_Git\\guardian\\plan\\{product}\\device.yaml"
     try:
         with open(config_path, 'r', encoding='utf-8') as f:
             return yaml.safe_load(f)
@@ -67,7 +67,7 @@ def load_test_config(request):
     """加载YAML测试配置（带编码修复）"""
     product = request.config.getoption('--product')
     module = request.config.getoption('--module')
-    config_path = os.path.join(os.path.dirname(__file__), f'D:\\Jenkins\\SWS_Git\\guradian\\plan\\{product}\\{module}.yaml')
+    config_path = os.path.join(os.path.dirname(__file__), f'E:\\Jenkins\\SWS_Git\\guradian\\plan\\{product}\\{module}.yaml')
     try:
         with open(config_path, 'r', encoding='utf-8') as f:
             return yaml.safe_load(f)
@@ -80,7 +80,7 @@ def load_test_config(request):
 def load_device_config(request):
     product = request.config.getoption("--product")
     base_dir = os.path.abspath(os.path.dirname(__file__))  # 获取项目根目录
-    config_path = os.path.join(base_dir, f'D:\\Jenkins\\SWS_Git\\guradian\\plan\\{product}\\device.yaml')
+    config_path = os.path.join(base_dir, f'E:\\Jenkins\\SWS_Git\\guradian\\plan\\{product}\\device.yaml')
     # ...保持后续逻辑不变
     try:
         with open(config_path, 'r', encoding='utf-8') as f:
@@ -137,7 +137,7 @@ def pytest_generate_tests(metafunc):
 
             config_path = os.path.join(
                 os.path.dirname(__file__),
-                f'D:\\Jenkins\\SWS_Git\\guardian\\plan\\{product}\\{module}.yaml'
+                f'E:\\Jenkins\\SWS_Git\\guardian\\plan\\{product}\\{module}.yaml'
             )
 
             with open(config_path, 'r', encoding='utf-8') as f:
