@@ -15,4 +15,4 @@ test_cases:
     loops: 1
     module: reboot
     description: "This is a test case for TestCase2"
-    product: wm630
+    product: XUItra

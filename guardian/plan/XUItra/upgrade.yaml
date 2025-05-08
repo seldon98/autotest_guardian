@@ -1,0 +1,6 @@
+test_cases:
+  - name: test_Upgrade
+    loops: 1
+    module: upgrade
+    description: "This is a test case for upgrade"
+    product: XUItra

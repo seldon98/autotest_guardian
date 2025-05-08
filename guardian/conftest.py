@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Dict, Any, Generator
 from datetime import datetime
 from serial import SerialException
+import logging
 
 # 环境常量定义
 PROJECT_ROOT = Path(__file__).parent.resolve()  # 项目根目录
@@ -20,8 +21,8 @@ def pytest_addoption(parser):
     parser.addoption(
         "--product", "-P",
         action="store",
-        default="wm630",  # 直接设置默认值，不从 ini 读取
-        help="指定产品名称，如 wm630"
+        default="XUTra",  # 直接设置默认值，不从 ini 读取
+        help="指定产品名称，如 XUTra"
     )
     parser.addoption(
         "--plan", "-M",
@@ -31,15 +32,25 @@ def pytest_addoption(parser):
     )
 
 
-def pytest_configure(config: pytest.Config) -> None:
-    """初始化测试环境"""
-    # 配置日志文件路径（按时间戳命名）
-    log_dir = PROJECT_ROOT / "logs"
+def pytest_configure(config):
+    """强制设置动态日志文件路径"""
+    log_dir = Path("logs")
     log_dir.mkdir(exist_ok=True)
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_file = log_dir / f"atf_{timestamp}.log"
-    config.option.log_file = str(log_file)
+    dynamic_log_path = log_dir / f"atf_{timestamp}.log"
+
+    # 关键操作：覆盖pytest配置
+    config.option.log_file = str(dynamic_log_path)
+    config.option.log_file_level = "DEBUG"
+
+    # 初始化基础日志配置
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(levelname)-8s %(asctime)s [%(name)s:%(lineno)s] : %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+        force=True  # 覆盖已有配置
+    )
 
 
 def resolve_config_path(product: str, plan: str) -> Path:

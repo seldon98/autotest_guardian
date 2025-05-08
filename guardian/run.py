@@ -20,6 +20,8 @@ def clean_directory(dir_path: str) -> None:
 def load_test_plan(product: str, plan_name: str) -> List[str]:
     """加载测试计划YAML文件并返回用例列表"""
     plan_path = os.path.join("plan", product, f"{plan_name}.yaml")
+    print(f"[DEBUG] 尝试加载测试计划路径: {os.path.abspath(plan_path)}") # 显示绝对路径
+    plan_path = os.path.abspath(plan_path)
     try:
         with open(plan_path, 'r') as f:
             plan_data = yaml.safe_load(f)
