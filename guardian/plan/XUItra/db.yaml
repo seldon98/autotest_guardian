@@ -1,6 +1,0 @@
-test_cases:
-  - name: test_V1
-    loops: 1
-    module: link
-    description: "This is a test case for TestV1"
-    product: wm630

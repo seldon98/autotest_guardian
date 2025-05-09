@@ -1,0 +1,12 @@
+test_cases:
+  - name: test_comfort_assistance
+    loops: 2
+    module: mode
+    description: "This is a test case for TestV1"
+    product: XUItra
+
+  - name: test_fitness_assistance
+    loops: 1
+    module: mode
+    description: "This is a test case for TestV1"
+    product: XUItra
