@@ -2,40 +2,52 @@ import os
 import argparse
 import pytest
 import shutil
+import os
+import argparse
+import pytest
+import shutil
 import yaml
 import subprocess
+import chardet  # 新增编码检测
 from typing import List
 from datetime import datetime
 
+# 全局编码设置
+import sys
+import io
 
+sys.stdin = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-
-# 指定目标路径（可以是绝对路径或相对路径）
-reports_path = rf"E:\Jenkins\SWS_Git\guardian\reports\{timestamp}"  # 替换为你的路径
+reports_path = rf"E:\Jenkins\SWS_Git\guardian\reports\{timestamp}"
 temps_path = rf"E:\Jenkins\SWS_Git\guardian\temps\{timestamp}"
 
-# 创建文件夹（如果路径中的父目录不存在，会自动创建）
-os.makedirs(reports_path, exist_ok=True)  # exist_ok=True 表示文件夹存在时不报错
-
+os.makedirs(reports_path, exist_ok=True)
 os.makedirs(temps_path, exist_ok=True)
 
 
-
 def load_test_plan(product: str, plan_name: str) -> List[str]:
-    """加载测试计划YAML文件并返回用例列表"""
+    """加载测试计划YAML文件并返回用例列表（编码安全版）"""
     plan_path = os.path.join("plan", product, f"{plan_name}.yaml")
-    print(f"[DEBUG] 尝试加载测试计划路径: {os.path.abspath(plan_path)}") # 显示绝对路径
-    plan_path = os.path.abspath(plan_path)
+    print(f"[DEBUG] 尝试加载测试计划路径: {os.path.abspath(plan_path)}")
+
+    # 检测文件编码
+    with open(plan_path, 'rb') as f:
+        raw = f.read(1024)
+        result = chardet.detect(raw)
+        encoding = result['encoding'] or 'utf-8'
+        print(f"[DEBUG] 检测到文件编码: {encoding} (置信度: {result['confidence']:.0%})")
+
     try:
-        with open(plan_path, 'r') as f:
+        with open(plan_path, 'r', encoding=encoding) as f:
             plan_data = yaml.safe_load(f)
             return plan_data.get('test_cases', [])
-    except FileNotFoundError:
-        raise RuntimeError(f"测试计划文件不存在: {plan_path}")
-    except yaml.YAMLError as e:
-        raise RuntimeError(f"YAML解析错误: {str(e)}")
-
+    except UnicodeDecodeError as e:
+        raise RuntimeError(f"文件解码失败，请将 {plan_path} 转换为 UTF-8 编码")
+    except Exception as e:
+        raise RuntimeError(f"YAML加载失败: {str(e)}")
 
 def build_pytest_args(product: str, plan_name: str) -> List[str]:
     """根据测试计划构造pytest执行参数"""
@@ -82,11 +94,20 @@ def generate_allure_report() -> None:
 
 
 def main():
-    parser = argparse.ArgumentParser(description='执行自动化测试计划')
-    parser.add_argument('-P', '--product', required=True, help='产品代号（如 wm630）')
-    parser.add_argument('-M', '--plan', required=True, help='测试计划名称（如 smoke）')
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-P", "--product", required=True)
+    parser.add_argument("-M", "--plan", required=True)
+    parser.add_argument("--log-level", default="INFO")
     args = parser.parse_args()
 
+    # 构造 pytest 参数
+    pytest_args = [
+        "-s",
+        "-v",
+        f"--log-level={args.log_level}",
+        f"--product={args.product}",
+        f"--plan={args.plan}"
+    ]
     try:
 
 

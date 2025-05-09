@@ -4,7 +4,6 @@ import time
 from datetime import datetime
 import os
 
-from scripts.regsetup import description
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -61,36 +60,6 @@ class TestComfortAssistance:
 
         return percentValue.info['contentDescription']
 
-    def rightSwipeMax(self, d, element, percentValue):
-
-        if element.exists():
-            # 方法1：直接点击元素
-            element.click()
-
-            # 方法2：滑动操作（根据 scrollable=True）
-            element.swipe("right", steps=100)  # 向左滑动
-
-            time.sleep(2)
-
-            element.swipe("right", steps=100)  # 向左滑动
-
-            time.sleep(2)
-
-            element.swipe("right", steps=100)  # 向左滑动
-
-            time.sleep(2)
-
-            logging.info("Description 属性值:"+percentValue.info['contentDescription']+"%")
-
-            return percentValue.info['contentDescription']
-
-        else:
-            logging.error("元素未找到，尝试滚动到可视区域")
-            # 若元素在 ScrollView 中需要滚动
-            d(scrollable=True).scroll.to(className="android.view.View", index=18)
-
-            return "No"
-
 
     def rightSwipeUp(self, element, percentValue):
 
@@ -142,7 +111,7 @@ class TestComfortAssistance:
 
 
 
-    def test_execution(self, case_config):
+    def test_execution(self):
 
         logging.info("舒适模式下的助力设置")
 
@@ -163,50 +132,50 @@ class TestComfortAssistance:
             index="16"
         )
 
-        # Flag  = True
-        #
-        # logging.info("设置舒适模式助力强度至1%")
-        # MinValue = self.leftSwipeMin(d, element, percentValue)
-        #
-        # if MinValue == "No":
-        #     logging.error("助力设置至1%失败")
-        #     Flag = False
-        # else:
-        #     logging.info("当前助力强度为: " + str(MinValue) + "%")
-        #
-        # i = 1
-        #
-        # while i < 6:
-        #
-        #     logging.info("助力强度为:" + str(i * 20) + "%")
-        #
-        #     up = self.rightSwipeUp(element, percentValue)
-        #
-        #     if up  == str(i*20):
-        #         logging.info(up + "% 助力强度设置成功:")
-        #     else:
-        #         logging.error(str(i*20) + "% 助力强度设置失败")
-        #         d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}\{i * 20}%%_faile.jpg")
-        #         Flag = False
-        #
-        #     i = i + 1
-        #
-        # i = 1
-        #
-        # while i < 6:
-        #
-        #     up = self.leftSwipeDown(element, percentValue)
-        #     logging.info(up)
-        #     if up == str(100-i * 20) or (up=="1" and i ==5):
-        #         logging.info(up + "% 助力强度设置成功:")
-        #     else:
-        #         logging.error(str(100-i * 20) + "% 助力强度设置失败")
-        #         d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}\{100-(i*20)}%%_error.jpg")
-        #         Flag = False
-        #     i = i + 1
-        #
-        # if Flag:
-        #     logging.info("舒适模式助力强度设置测试通过")
-        # else:
-        #     logging.error("舒适模式阻力强度设置测试异常")
-        #     assert False
+        Flag  = True
+
+        logging.info("设置舒适模式助力强度至1%")
+        MinValue = self.leftSwipeMin(d, element, percentValue)
+
+        if MinValue == "No":
+            logging.error("助力设置至1%失败")
+            Flag = False
+        else:
+            logging.info("当前助力强度为: " + str(MinValue) + "%")
+
+        i = 1
+
+        while i < 6:
+
+            logging.info("助力强度为:" + str(i * 20) + "%")
+
+            up = self.rightSwipeUp(element, percentValue)
+
+            if up  == str(i*20):
+                logging.info(up + "% 助力强度设置成功:")
+            else:
+                logging.error(str(i*20) + "% 助力强度设置失败")
+                d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}\{i * 20}%%_faile.jpg")
+                Flag = False
+
+            i = i + 1
+
+        i = 1
+
+        while i < 6:
+
+            up = self.leftSwipeDown(element, percentValue)
+            logging.info(up)
+            if up == str(100-i * 20) or (up=="1" and i ==5):
+                logging.info(up + "% 助力强度设置成功:")
+            else:
+                logging.error(str(100-i * 20) + "% 助力强度设置失败")
+                d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}\{100-(i*20)}%%_error.jpg")
+                Flag = False
+            i = i + 1
+
+        if Flag:
+            logging.info("舒适模式助力强度设置测试通过")
+        else:
+            logging.error("舒适模式阻力强度设置测试异常")
+            assert False

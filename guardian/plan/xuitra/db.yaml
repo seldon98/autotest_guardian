@@ -1,12 +1,13 @@
+# plan/XUItra/db.yaml
 test_cases:
   - name: test_comfort_assistance
-    loops: 2
+    loops: 1
     module: mode
-    description: "This is a test case for TestV1"
-    product: XUItra
+    product: xuitra
+    class: TestComfortAssistance  # 必须添加的字段（与测试类名匹配）
 
   - name: test_fitness_assistance
     loops: 1
     module: mode
-    description: "This is a test case for TestV1"
-    product: XUItra
+    product: xuitra
+    class: TestFitnessAssistance  # 必须添加的字段（与测试类名匹配）
