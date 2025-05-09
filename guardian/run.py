@@ -5,16 +5,21 @@ import shutil
 import yaml
 import subprocess
 from typing import List
+from datetime import datetime
 
 
-def clean_directory(dir_path: str) -> None:
-    """安全清理目录（忽略不存在的情况）"""
-    try:
-        if os.path.exists(dir_path):
-            shutil.rmtree(dir_path)
-            print(f"[CLEAN] 清理目录: {dir_path}")
-    except Exception as e:
-        print(f"[WARNING] 清理失败 {dir_path}: {str(e)}")
+
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+# 指定目标路径（可以是绝对路径或相对路径）
+reports_path = rf"E:\Jenkins\SWS_Git\guardian\reports\{timestamp}"  # 替换为你的路径
+temps_path = rf"E:\Jenkins\SWS_Git\guardian\temps\{timestamp}"
+
+# 创建文件夹（如果路径中的父目录不存在，会自动创建）
+os.makedirs(reports_path, exist_ok=True)  # exist_ok=True 表示文件夹存在时不报错
+
+os.makedirs(temps_path, exist_ok=True)
+
 
 
 def load_test_plan(product: str, plan_name: str) -> List[str]:
@@ -55,20 +60,20 @@ def build_pytest_args(product: str, plan_name: str) -> List[str]:
         *case_paths,
         f"--product={product}",
         f"--plan={plan_name}",
-        "--alluredir=temps",
+        f"--alluredir=temps/{timestamp}",
         "-v"
     ]
 
 
 def generate_allure_report() -> None:
     """生成Allure报告并验证结果"""
-    # 确保报告目录存在
-    os.makedirs("reports", exist_ok=True)
+    #  确保报告目录存在
+    # os.makedirs("reports", exist_ok=True)
 
     # 执行Allure命令
-    allure_cmd = "allure generate temps -o reports --clean"
+    allure_cmd = f"allure generate temps/{timestamp} -o reports/{timestamp} --clean"
     if os.system(allure_cmd) == 0:
-        report_path = os.path.abspath("reports/index.html")
+        report_path = os.path.abspath(f"reports/{timestamp}/index.html")
         print(f"\n[SUCCESS] 报告路径：file://{report_path}")
     else:
         print("[ERROR] 报告生成失败，请检查：")
@@ -83,10 +88,7 @@ def main():
     args = parser.parse_args()
 
     try:
-        # 预清理
-        print("\n=== 环境初始化 ===")
-        clean_directory('temps')
-        clean_directory('reports')
+
 
         # 构造并执行pytest命令
         pytest_args = build_pytest_args(args.product, args.plan)

@@ -64,7 +64,6 @@ class TestUpgrade:
             print("Enter the upgrade")
         else:
             print("Upgrade exception")
-            d.screenshot(f"upgradeFaile_{timestamp}.jpg")
             d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\upgradeFaile1_{timestamp}.jpg")  # 修正路径
 
     def safe_print_description(self,desc):
@@ -110,13 +109,11 @@ class TestUpgrade:
                 time.sleep(3)  # 适当间隔避免高频请求
 
                 if d(description="固件更新失败").exists():
-                    d.screenshot(f"upgradeFaile2_{timestamp}.png")
                     d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\upgradeFaile2_{timestamp}.jpg")
                     return False
 
                 if d(description="固件更新成功").exists():
                     logging.info("升级成功")
-                    d.screenshot(f"upgradeSuccess_{timestamp}.png")
                     d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\upgradeSuccesss_{timestamp}.jpg")
                     return False
 
@@ -145,16 +142,10 @@ class TestUpgrade:
             d.app_start('com.hypershell.hypershell')
             time.sleep(10)
 
-        # 通过描述文本定位取消按钮
-        cancel_button = d(description="取消")
-
-        if cancel_button.exists():
-            d.screenshot(f"DetectAnomalies_{timestamp}.png")
+        if d(description="取消").exists():
             d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\DetectAnomalies_{timestamp}.jpg")  # 修正路径
-            cancel_button.click()
+            d(description="取消").click()
             print("已点击取消按钮")
-        else:
-            print("未找到取消按钮")
 
         if d(description="充电中"):
             d(description="确认").click()

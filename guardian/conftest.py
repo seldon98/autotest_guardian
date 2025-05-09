@@ -106,7 +106,7 @@ def serial_conn(device_config: Dict) -> Generator[serial.Serial, None, None]:
 
 
 def load_test_cases(config_path: Path) -> list:
-    """从YAML加载测试用例配置"""
+    """从YAML加载测试用例配置（修复版）"""
     with open(config_path, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
@@ -115,19 +115,30 @@ def load_test_cases(config_path: Path) -> list:
 
     test_cases = []
     for case in config["test_cases"]:
-        # 配置项校验
-        required_fields = {"name", "module", "loops", "product"}
-        if missing := required_fields - case.keys():
-            pytest.exit(f"测试用例配置缺失字段: {missing}")
+        # 强制统一产品名称为小写
+        case['product'] = case['product'].strip().lower()
 
-        # 动态导入测试模块
+        # 构建模块物理路径
+        module_file = (
+                PROJECT_ROOT /
+                "case" /
+                case['product'] /
+                case['module'] /
+                f"{case['name']}.py"
+        )
+
+        # 文件存在性检查
+        if not module_file.exists():
+            pytest.exit(f"测试文件不存在: {module_file}")
+
+        # 构建导入路径
         module_path = f"case.{case['product']}.{case['module']}.{case['name']}"
+
         try:
             importlib.import_module(module_path)
-        except ModuleNotFoundError:
-            pytest.exit(f"测试模块不存在: {module_path}")
+        except Exception as e:
+            pytest.exit(f"模块加载失败: {module_path} - {str(e)}")
 
-        # 构造参数化数据
         test_cases.extend(
             [{"name": case["name"], "loop": i, "desc": case["description"]}
              for i in range(1, case["loops"] + 1)]
