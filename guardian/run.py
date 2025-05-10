@@ -73,7 +73,10 @@ def build_pytest_args(product: str, plan_name: str) -> List[str]:
         f"--product={product}",
         f"--plan={plan_name}",
         f"--alluredir=temps/{timestamp}",
-        "-v"
+        "-v",
+        "--capture=fd",  # 确保捕获所有输出
+        "--log-level=DEBUG",
+        "--show-capture=all"
     ]
 
 
@@ -94,10 +97,11 @@ def generate_allure_report() -> None:
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-P", "--product", required=True)
-    parser.add_argument("-M", "--plan", required=True)
-    parser.add_argument("--log-level", default="INFO")
+    parser = argparse.ArgumentParser(description="自动化测试执行引擎")
+    parser.add_argument("-P", "--product", required=True, help="产品名称 (e.g. xuitra)")
+    parser.add_argument("-M", "--plan", required=True, help="测试计划名称 (e.g. upgrade)")
+    parser.add_argument("--log-level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+                        help="日志详细级别")
     args = parser.parse_args()
 
     # 构造 pytest 参数
@@ -108,24 +112,47 @@ def main():
         f"--product={args.product}",
         f"--plan={args.plan}"
     ]
+
     try:
-
-
-        # 构造并执行pytest命令
+        # 构造 pytest 执行参数
         pytest_args = build_pytest_args(args.product, args.plan)
-        print("[EXECUTE] 测试命令:", "pytest " + " ".join(pytest_args))
 
-        exit_code = pytest.main(pytest_args)
-        if exit_code != 0:
-            print(f"[WARNING] 测试执行异常 (退出码: {exit_code})")
+        # 添加必要参数（确保不重复）
+        base_args = [
+            "-s",
+            "-v",
+            f"--log-level={args.log_level}",
+            f"--alluredir={temps_path}"
+        ]
+        full_args = base_args + pytest_args
 
-        # 生成报告
+        print("\n=== 测试执行参数 ===")
+        print("pytest " + " ".join(full_args))
+
+        # 执行测试（同步阻塞执行）
+        print("\n=== 开始执行测试 ===")
+        exit_code = pytest.main(full_args)
+
+        # 结果状态码处理
+        if exit_code == pytest.ExitCode.OK:
+            print("\n[SUCCESS] 所有测试用例执行完成")
+        elif exit_code == pytest.ExitCode.TESTS_FAILED:
+            print(f"\n[WARNING] 测试失败 (失败用例数: {exit_code})")
+        else:
+            print(f"\n[ERROR] 异常退出 (代码: {exit_code})")
+
+        # 生成Allure报告（无论结果如何）
         print("\n=== 生成测试报告 ===")
         generate_allure_report()
 
+        # 清理临时文件（按需开启）
+        if os.path.exists(temps_path):
+            shutil.rmtree(temps_path)
+            print(f"已清理临时文件: {temps_path}")
+
     except Exception as e:
         print(f"\n[CRITICAL] 主程序异常: {str(e)}")
-        exit(1)
+        sys.exit(1)
 
 
 if __name__ == '__main__':

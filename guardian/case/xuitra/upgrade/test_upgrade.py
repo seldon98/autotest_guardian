@@ -2,13 +2,22 @@ import uiautomator2 as u2
 import time
 from datetime import datetime, timedelta
 import logging
+import os
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+# 指定目标路径（可以是绝对路径或相对路径）
+target_path = rf"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}"  # 替换为你的路径
+
+# 创建文件夹（如果路径中的父目录不存在，会自动创建）
+os.makedirs(target_path, exist_ok=True)  # exist_ok=True 表示文件夹存在时不报错
+
 
 class TestUpgrade:
 
     def enter_upgrade(self, d):
         # 点击 Hypershell 主入口
+        time.sleep(5)
         d(description="Hypershell").click()
         time.sleep(3)
 
@@ -84,6 +93,8 @@ class TestUpgrade:
         end_time = datetime.now() + timedelta(minutes=duration_minutes)
         print(f"开始监控，将持续到 {end_time.strftime('%H:%M:%S')}")
 
+        Flag = False
+
         while datetime.now() < end_time:
             try:
                 # 获取所有目标元素（改用更精确的选择器）
@@ -109,13 +120,14 @@ class TestUpgrade:
                 time.sleep(3)  # 适当间隔避免高频请求
 
                 if d(description="固件更新失败").exists():
-                    d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\upgradeFaile2_{timestamp}.jpg")
-                    return False
+                    d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}\pgradeFaile.jpg")
+                    break
 
                 if d(description="固件更新成功").exists():
                     logging.info("升级成功")
-                    d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\upgradeSuccesss_{timestamp}.jpg")
-                    return False
+                    d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}\upgradeSuccesss.jpg")
+                    Flag = True
+                    break
 
             except u2.exceptions.UiAutomationNotConnectedError:
                 print("设备连接丢失，尝试重连...")
@@ -125,6 +137,11 @@ class TestUpgrade:
                 time.sleep(5)
 
         print("监控周期结束")
+
+        if Flag:
+            return True
+        else:
+            return False
 
 
 
@@ -143,7 +160,7 @@ class TestUpgrade:
             time.sleep(10)
 
         if d(description="取消").exists():
-            d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\DetectAnomalies_{timestamp}.jpg")  # 修正路径
+            d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}\DetectAnomalies.jpg")  # 修正路径
             d(description="取消").click()
             print("已点击取消按钮")
 

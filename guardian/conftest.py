@@ -79,8 +79,9 @@ def load_test_cases(config_path: Path) -> List[Dict]:
 # --------------------------
 # 核心参数化逻辑
 # --------------------------
+# 修改 conftest.py 中的 pytest_generate_tests 函数
 def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
-    """动态生成参数化测试（带类过滤）"""
+    """动态生成参数化测试（带类过滤及循环扩展）"""
     if "case_config" in metafunc.fixturenames:
         product = metafunc.config.getoption("--product")
         plan = metafunc.config.getoption("--plan")
@@ -95,14 +96,18 @@ def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
             if not current_class:
                 return  # 非类测试不处理
 
-            # 过滤匹配当前类的用例
-            filtered_cases = [
-                case for case in all_cases
-                if case.get("class") == current_class
-            ]
+            filtered_cases = []
+            for case in all_cases:
+                if case.get("class") == current_class:
+                    loops = case.get("loops", 1)
+                    # 根据循环次数扩展用例
+                    for loop_num in range(loops):
+                        new_case = case.copy()
+                        new_case['loop'] = loop_num + 1  # 记录当前循环次数
+                        filtered_cases.append(new_case)
 
             CONFIG_LOGGER.debug(
-                f"类 [{current_class}] 匹配到 {len(filtered_cases)} 个用例 | "
+                f"类 [{current_class}] 生成 {len(filtered_cases)} 个测试实例 | "
                 f"原始用例数: {len(all_cases)}"
             )
 
@@ -110,6 +115,7 @@ def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
 
         except Exception as e:
             pytest.exit(f"测试用例生成失败: {str(e)}")
+
 
 
 # --------------------------
@@ -161,6 +167,10 @@ def serial_conn(device_config: Dict) -> Generator[serial.Serial, None, None]:
 
 @pytest.fixture(autouse=True)
 def allure_logger(case_config: Dict) -> None:
-    """自动注入Allure元数据"""
+    """自动注入Allure元数据（含循环信息）"""
+    base_desc = f"用例循环次数: {case_config.get('loops', 1)}"
+    if 'loop' in case_config:
+        base_desc += f" | 当前循环: {case_config['loop']}"
+
     allure.dynamic.title(case_config["name"])
-    allure.dynamic.description(f"循环次数: {case_config.get('loops', 1)}")
+    allure.dynamic.description(base_desc)
