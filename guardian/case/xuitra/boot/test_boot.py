@@ -1,10 +1,7 @@
-# test_boot.py
 import logging
 import serial
 import serial.tools.list_ports
-import time
 import os
-import esptool
 from common.boot_common import ESP32Flasher
 
 # 使用绝对路径

@@ -1,17 +1,7 @@
 
-import tkinter as tk
 import serial
 import serial.tools.list_ports
-import tkinter.font as tkFont
-import threading
 import time
-import datetime
-import os
-import subprocess
-from functools import partial
-import sys
-from tkinter import scrolledtext
-from tkinter import Label
 import esptool
 from threading import Thread
 

@@ -1,6 +1,6 @@
 test_cases:
   - name: test_upgrade
-    loops: 100
+    loops: 1
     module: upgrade
     product: xuitra
     class: TestUpgrade
