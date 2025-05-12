@@ -23,7 +23,7 @@ class TestUpgrade:
 
         # 点击坐标位置（建议改用百分比或元素定位）
         d.click(0.842, 0.183)  # 使用百分比更安全
-        time.sleep(3)
+        time.sleep(5)
 
         # 进入升级页面
         d(description="升级").click()
@@ -67,7 +67,7 @@ class TestUpgrade:
             if d(description="确定现在更新吗？").exists:
                 d(description="升级").click()
 
-
+        time.sleep(3)
 
         if d(description="请在手机上保持蓝牙开启,并在更新时保持应用在前台").exists():
             print("Enter the upgrade")

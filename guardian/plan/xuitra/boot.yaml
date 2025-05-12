@@ -1,0 +1,7 @@
+# plan/XUItra/boot.yaml
+test_cases:
+  - name: test_boot
+    loops: 1
+    module: boot
+    product: xuitra
+    class: TestBoot  # 必须添加的字段（与测试类名匹配）
