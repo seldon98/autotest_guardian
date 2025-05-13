@@ -1,0 +1,8 @@
+pytest>=7.0
+allure-pytest
+requests
+PyYAML
+python-dotenv
+pyserial
+setuptools
+uiautomator2
