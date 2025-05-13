@@ -2,7 +2,7 @@ import logging
 import serial
 import serial.tools.list_ports
 import os
-from common.boot_common import ESP32Flasher
+from common.boot_base import ESP32Flasher
 
 # 使用绝对路径
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -31,8 +31,6 @@ class TestBoot:
             assert False, "未找到 CP210x 设备"
             return
 
-        print('================')
-        print(STABLE_BOOTLOADER_FILE_PATH)
 
         flasher = ESP32Flasher(port)
         try:
