@@ -27,6 +27,12 @@ STABLE_BOOTLOADER_FILE_PATH = "./esp32/stable/bootloader.bin"
 STABLE_PARTITION_FILE_PATH = "./esp32/stable/partitions.bin"
 STABLE_OTA_DATA_INITIAL_PATH = "./esp32/stable/ota_data_initial.bin"
 
+# 宏定义：设置这些路径为当前目录下的某个子目录中的文件
+FIRMWARE_FILE_PATH = "./esp32/test/firmware.bin"
+BOOTLOADER_FILE_PATH = "./esp32/test/bootloader.bin"
+PARTITION_FILE_PATH = "./esp32/test/partitions.bin"
+OTA_DATA_INITIAL_PATH = "./esp32/test/ota_data_initial.bin"
+
 
 esp32_line = b''
 write_back_result = ""
@@ -194,14 +200,14 @@ class TestMotor:
 
         return os.path.join(application_path, relative_path)
 
-    def burn_motor(self):
+    def burn_motor(self, path):
 
         Flag = False
 
         isEsp32Available = 0
         isEsp32Connected = 0
 
-        directory_path = self.resource_path('release')
+        directory_path = self.resource_path(path)
         latest_file_stm = self.find_latest_version_file_stm(directory_path)
         latest_file_esp = self.find_latest_version_file_esp(directory_path)
 
@@ -263,13 +269,13 @@ class TestMotor:
                 time.sleep(1.0)
 
                 serialEsp32.write(b'firmware\n')
-                data, size = self.read_file_and_get_size(self.resource_path('release/' + latest_file_stm))
+                data, size = self.read_file_and_get_size(self.resource_path(path+'/' + latest_file_stm))
                 logging.info(f'File Size is : {size} bytes')
 
                 serialEsp32.write((str(size) + '\n').encode('utf-8'))
                 logging.info((str(size) + '\n').encode('utf-8'))
 
-                md5_hash = self.get_md5(self.resource_path('release/' + latest_file_stm))
+                md5_hash = self.get_md5(self.resource_path(path + '/' + latest_file_stm))
                 logging.info(f'MD5 Hash is : {md5_hash}')
                 logging.info((md5_hash + '\n').encode('utf-8'))
                 serialEsp32.write((md5_hash + '\n').encode('utf-8'))
@@ -306,8 +312,8 @@ class TestMotor:
                     # 修正时间计算逻辑
                     elapsed_time = datetime.now() - start_time
                     if elapsed_time.total_seconds() > 120:  # 直接比较总秒数
-                        logging.error("电机更新失败")
-                        Flag = True  # 使用正确注释
+                        logging.error("电机更新失败， 更新超時")
+                        Flag = False  # 使用正确注释
         return Flag
 
     @staticmethod
@@ -322,42 +328,66 @@ class TestMotor:
         return None
 
 
-    def test_excetion(self, case_config):
+    def bruning(self, masterboard):
 
         Flag = True
 
-        if self.burn_motor():
+        if self.burn_motor(masterboard):
             pass
         else:
             logging.error("電機燒錄失敗")
-            Flag = False
+            return False
 
         port = self.find_cp210_port()
         if not port:
             logging.error("未检测到 CP210x 设备，终止测试")
             assert False, "未找到 CP210x 设备"
-            return
+            return False
 
         flasher = ESP32Flasher(port)
         try:
-            download_success = flasher.flash_firmware(
-                STABLE_FIRMWARE_FILE_PATH,
-                STABLE_BOOTLOADER_FILE_PATH,
-                STABLE_PARTITION_FILE_PATH,
-                STABLE_OTA_DATA_INITIAL_PATH,
-                port
-            )
+            if masterboard =="base":
+                download_success = flasher.flash_firmware(
+                    STABLE_FIRMWARE_FILE_PATH,
+                    STABLE_BOOTLOADER_FILE_PATH,
+                    STABLE_PARTITION_FILE_PATH,
+                    STABLE_OTA_DATA_INITIAL_PATH,
+                    port
+                )
+            else:
+                download_success = flasher.flash_firmware(
+                    FIRMWARE_FILE_PATH,
+                    BOOTLOADER_FILE_PATH,
+                    PARTITION_FILE_PATH,
+                    OTA_DATA_INITIAL_PATH,
+                    port
+                )
         except Exception as e:
             logging.error(f"烧录过程中发生异常: {str(e)}")
             download_success = False
 
         if download_success:
             logging.info("固件更新成功")
+            return True
         else:
             logging.error("固件更新失败")
-            Flag = False
+            return False
 
-        if Flag:
-            pass
+
+    def test_excetion(self, case_config):
+
+        flag = self.bruning("release")
+
+        if flag:
+            logging.info("release burning success")
+
+            if self.bruning("base"):
+                logging.info("base burning success")
+            else:
+                logging.error("base burning failed")
+                assert False
         else:
+            logging.error("release burning failed")
             assert False
+
+
