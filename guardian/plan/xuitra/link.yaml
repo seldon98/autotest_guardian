@@ -1,0 +1,8 @@
+# plan/XUItra/db.yaml
+test_cases:
+  - name: TestBluetoothConnect
+    loops: 1
+    module: mode
+    product: xuitra
+    class: TestComfortAssistance  # 必须添加的字段（与测试类名匹配）
+
