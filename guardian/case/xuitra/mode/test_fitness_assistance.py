@@ -168,10 +168,10 @@ class TestFitnessAssistance:
 
             if up  == str(i*20):
                 logging.info(up + "% 助力强度设置成功:")
-                d.screenshot(rf"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}\{i * 20}%%.jpg")
+                d.screenshot(rf"E:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\{i * 20}%%.jpg")
             else:
                 logging.error(str(i*20) + "% 助力强度设置失败")
-                d.screenshot(rf"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}\{i * 20}%%_faile.jpg")
+                d.screenshot(rf"E:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\{i * 20}%%_faile.jpg")
                 Flag = False
 
             i = i + 1
@@ -186,7 +186,7 @@ class TestFitnessAssistance:
                 logging.info(up + "% 助力强度设置成功:")
             else:
                 logging.error(str(100-i * 20) + "% 助力强度设置失败")
-                d.screenshot(rf"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}\{100-(i*20)}%%_error.jpg")
+                d.screenshot(rf"E:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\{100-(i*20)}%%_error.jpg")
                 Flag = False
             i = i + 1
 

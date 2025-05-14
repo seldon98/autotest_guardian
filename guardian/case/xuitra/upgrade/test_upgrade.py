@@ -120,12 +120,12 @@ class TestUpgrade:
                 time.sleep(3)  # 适当间隔避免高频请求
 
                 if d(description="固件更新失败").exists():
-                    d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}\pgradeFaile.jpg")
+                    d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\autotest_guardian\logs\screen\{timestamp}\pgradeFaile.jpg")
                     break
 
                 if d(description="固件更新成功").exists():
                     logging.info("升级成功")
-                    d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}\upgradeSuccesss.jpg")
+                    d.screenshot(fr"E:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\upgradeSuccesss.jpg")
                     Flag = True
                     break
 
@@ -160,7 +160,7 @@ class TestUpgrade:
             time.sleep(10)
 
         if d(description="取消").exists():
-            d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}\DetectAnomalies.jpg")  # 修正路径
+            d.screenshot(fr"E:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\DetectAnomalies.jpg")  # 修正路径
             d(description="取消").click()
             print("已点击取消按钮")
 

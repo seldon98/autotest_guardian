@@ -100,7 +100,7 @@ class TestComfortAssistance:
         time.sleep(3)
 
         if d(description="取消").exists():
-            d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}\DetectAnomalies.jpg")  # 修正路径
+            d.screenshot(fr"E:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\DetectAnomalies.jpg")  # 修正路径
             d(description="取消").click()
             logging.info("已点击取消按钮")
             time.sleep(2)
@@ -155,7 +155,7 @@ class TestComfortAssistance:
                 logging.info(up + "% 助力强度设置成功:")
             else:
                 logging.error(str(i*20) + "% 助力强度设置失败")
-                d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}\{i * 20}%%_faile.jpg")
+                d.screenshot(fr"E:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\{i * 20}%%_faile.jpg")
                 Flag = False
 
             i = i + 1
@@ -170,7 +170,7 @@ class TestComfortAssistance:
                 logging.info(up + "% 助力强度设置成功:")
             else:
                 logging.error(str(100-i * 20) + "% 助力强度设置失败")
-                d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}\{100-(i*20)}%%_error.jpg")
+                d.screenshot(fr"E:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\{100-(i*20)}%%_error.jpg")
                 Flag = False
             i = i + 1
 
