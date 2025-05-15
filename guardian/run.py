@@ -8,7 +8,7 @@ import pytest
 import shutil
 import yaml
 import subprocess
-import chardet  # 新增编码检测
+import chardet
 from typing import List
 from datetime import datetime
 
@@ -21,8 +21,8 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='repla
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-reports_path = rf"E:\Jenkins\SWS_Git\guardian\reports\{timestamp}"
-temps_path = rf"E:\Jenkins\SWS_Git\guardian\temps\{timestamp}"
+reports_path = rf"E:\Jenkins\SWS_Git\autotest_guardian\guardian\reports\{timestamp}"
+temps_path = rf"E:\Jenkins\SWS_Git\autotest_guardian\guardian\temps\{timestamp}"
 
 os.makedirs(reports_path, exist_ok=True)
 os.makedirs(temps_path, exist_ok=True)
