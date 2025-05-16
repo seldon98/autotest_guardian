@@ -5,3 +5,9 @@ test_cases:
     module: boot
     product: xuitra
     class: TestMotor  # 必须添加的字段（与测试类名匹配）
+
+  - name: test_master
+    loops: 1
+    module: boot
+    product: xuitra
+    class: TestMaster  # 必须添加的字段（与测试类名匹配）

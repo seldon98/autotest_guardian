@@ -22,16 +22,16 @@ from common.boot_base import ESP32Flasher
 # 使用绝对路径
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # 宏定义：设置这些路径为当前目录下的某个子目录中的文件
-STABLE_FIRMWARE_FILE_PATH = "./esp32/stable/firmware.bin"
-STABLE_BOOTLOADER_FILE_PATH = "./esp32/stable/bootloader.bin"
-STABLE_PARTITION_FILE_PATH = "./esp32/stable/partitions.bin"
-STABLE_OTA_DATA_INITIAL_PATH = "./esp32/stable/ota_data_initial.bin"
+STABLE_FIRMWARE_FILE_PATH = "./case/xuitra/boot/esp32/stable/firmware.bin"
+STABLE_BOOTLOADER_FILE_PATH = "./case/xuitra/boot/esp32/stable/bootloader.bin"
+STABLE_PARTITION_FILE_PATH = "./case/xuitra/boot/esp32/stable/partitions.bin"
+STABLE_OTA_DATA_INITIAL_PATH = "./case/xuitra/boot/esp32/stable/ota_data_initial.bin"
 
 # 宏定义：设置这些路径为当前目录下的某个子目录中的文件
-FIRMWARE_FILE_PATH = "./esp32/test/firmware.bin"
-BOOTLOADER_FILE_PATH = "./esp32/test/bootloader.bin"
-PARTITION_FILE_PATH = "./esp32/test/partitions.bin"
-OTA_DATA_INITIAL_PATH = "./esp32/test/ota_data_initial.bin"
+FIRMWARE_FILE_PATH = "./case/xuitra/boot/esp32/test/firmware.bin"
+BOOTLOADER_FILE_PATH = "./case/xuitra/boot/esp32/test/bootloader.bin"
+PARTITION_FILE_PATH = "./case/xuitra/boot/esp32/test/partitions.bin"
+OTA_DATA_INITIAL_PATH = "./case/xuitra/boot/esp32/test/ota_data_initial.bin"
 
 
 esp32_line = b''
@@ -333,7 +333,7 @@ class TestMotor:
         Flag = True
 
         if self.burn_motor(masterboard):
-            pass
+            logging.info("电机烧录完成")
         else:
             logging.error("電機燒錄失敗")
             return False
@@ -363,14 +363,14 @@ class TestMotor:
                     port
                 )
         except Exception as e:
-            logging.error(f"烧录过程中发生异常: {str(e)}")
+            logging.error(f"主板烧录过程中发生异常: {str(e)}")
             download_success = False
 
         if download_success:
-            logging.info("固件更新成功")
+            logging.info("主板烧录成功")
             return True
         else:
-            logging.error("固件更新失败")
+            logging.error("主板烧录异常")
             return False
 
 

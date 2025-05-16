@@ -1,28 +1,31 @@
+import pytest
 import os
 import argparse
 import pytest
-import shutil
-import os
-import argparse
-import pytest
-import shutil
 import yaml
-import subprocess
 import chardet
 from typing import List
-from datetime import datetime
 
 # 全局编码设置
 import sys
 import io
 
+parser = argparse.ArgumentParser(description="自动化测试执行引擎")
+parser.add_argument("-P", "--product", required=True, help="产品名称 (e.g. xuitra)")
+parser.add_argument("-M", "--plan", required=True, help="测试计划名称 (e.g. upgrade)")
+parser.add_argument("--log-level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+                    help="日志详细级别")
+parser.add_argument('--timestamp', required=True)
+args = parser.parse_args()
+
+
 sys.stdin = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
-timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-reports_path = rf"E:\Jenkins\SWS_Git\autotest_guardian\guardian\reports\{timestamp}"
-temps_path = rf"E:\Jenkins\SWS_Git\autotest_guardian\guardian\temps\{timestamp}"
+
+reports_path = rf"E:\Jenkins\SWS_Git\autotest_guardian\guardian\reports\{args.timestamp}"
+temps_path = rf"E:\Jenkins\SWS_Git\autotest_guardian\guardian\temps\{args.timestamp}"
 
 os.makedirs(reports_path, exist_ok=True)
 os.makedirs(temps_path, exist_ok=True)
@@ -72,7 +75,7 @@ def build_pytest_args(product: str, plan_name: str) -> List[str]:
         *case_paths,
         f"--product={product}",
         f"--plan={plan_name}",
-        f"--alluredir=temps/{timestamp}",
+        f"--alluredir=temps/{args.timestamp}",
         "-v",
         "--capture=fd",  # 确保捕获所有输出
         "--log-level=DEBUG",
@@ -86,9 +89,9 @@ def generate_allure_report() -> None:
     # os.makedirs("reports", exist_ok=True)
 
     # 执行Allure命令
-    allure_cmd = f"allure generate temps/{timestamp} -o reports/{timestamp} --clean"
+    allure_cmd = f"allure generate temps/{args.timestamp} -o reports/{args.timestamp} --clean"
     if os.system(allure_cmd) == 0:
-        report_path = os.path.abspath(f"reports/{timestamp}/index.html")
+        report_path = os.path.abspath(f"reports/{args.timestamp}/index.html")
         print(f"\n[SUCCESS] 报告路径：file://{report_path}")
     else:
         print("[ERROR] 报告生成失败，请检查：")
@@ -97,12 +100,6 @@ def generate_allure_report() -> None:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="自动化测试执行引擎")
-    parser.add_argument("-P", "--product", required=True, help="产品名称 (e.g. xuitra)")
-    parser.add_argument("-M", "--plan", required=True, help="测试计划名称 (e.g. upgrade)")
-    parser.add_argument("--log-level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR"],
-                        help="日志详细级别")
-    args = parser.parse_args()
 
     # 构造 pytest 参数
     pytest_args = [
@@ -145,10 +142,10 @@ def main():
         print("\n=== 生成测试报告 ===")
         generate_allure_report()
 
-        # 清理临时文件（按需开启）
-        if os.path.exists(temps_path):
-            shutil.rmtree(temps_path)
-            print(f"已清理临时文件: {temps_path}")
+        # # 清理临时文件（按需开启）
+        # if os.path.exists(temps_path):
+        #     shutil.rmtree(temps_path)
+        #     print(f"已清理临时文件: {temps_path}")
 
     except Exception as e:
         print(f"\n[CRITICAL] 主程序异常: {str(e)}")

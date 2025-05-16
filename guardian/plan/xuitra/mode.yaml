@@ -1,0 +1,13 @@
+# plan/XUItra/boot.yaml
+test_cases:
+  - name: test_comfort_assistance
+    loops: 1
+    module: mode
+    product: xuitra
+    class: TestComfortAssistance  # 必须添加的字段（与测试类名匹配）
+
+  - name: test_fitness_assistance
+    loops: 1
+    module: mode
+    product: xuitra
+    class: TestFitnessAssistance  # 必须添加的字段（与测试类名匹配）

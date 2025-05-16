@@ -1,8 +1,7 @@
 # plan/XUItra/link.yaml
 test_cases:
   - name: test_bluetooth_connect
-    loops: 5
+    loops: 1
     module: link
     product: xuitra
     class: TestBluetoothConnect  # 必须添加的字段（与测试类名匹配）
-

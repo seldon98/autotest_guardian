@@ -6,19 +6,10 @@ import os
 
 # 配置统一时间戳和路径
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-target_path = os.path.join("E:", "Jenkins", "SWS_Git", "autotest_guardian",
-                           "guardian", "logs", "screen", timestamp)
+target_path = rf"E:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}"
 os.makedirs(target_path, exist_ok=True)
 
-# 配置日志系统
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[
-        logging.FileHandler(os.path.join(target_path, "execution.log")),
-        logging.StreamHandler()
-    ]
-)
+
 
 
 class TestBluetoothConnect:

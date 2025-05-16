@@ -7,12 +7,12 @@ from common.boot_base import ESP32Flasher
 # 使用绝对路径
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # 宏定义：设置这些路径为当前目录下的某个子目录中的文件
-STABLE_FIRMWARE_FILE_PATH = "./esp32/stable/firmware.bin"
-STABLE_BOOTLOADER_FILE_PATH = "./esp32/stable/bootloader.bin"
-STABLE_PARTITION_FILE_PATH = "./esp32/stable/partitions.bin"
-STABLE_OTA_DATA_INITIAL_PATH = "./esp32/stable/ota_data_initial.bin"
+STABLE_FIRMWARE_FILE_PATH = "./case/xuitra/boot/esp32/stable/firmware.bin"
+STABLE_BOOTLOADER_FILE_PATH = "./case/xuitra/boot/esp32/stable/bootloader.bin"
+STABLE_PARTITION_FILE_PATH = "./case/xuitra/boot/esp32/stable/partitions.bin"
+STABLE_OTA_DATA_INITIAL_PATH = "./case/xuitra/boot/esp32/stable/ota_data_initial.bin"
 
-class TestBoot:
+class TestMaster:
     @staticmethod
     def find_cp210_port():
         """检测 CP210x 设备的串口"""
@@ -25,7 +25,7 @@ class TestBoot:
         return None
 
     def test_execution(self, case_config):
-        port = TestBoot.find_cp210_port()
+        port = self.find_cp210_port()
         if not port:
             logging.error("未检测到 CP210x 设备，终止测试")
             assert False, "未找到 CP210x 设备"
@@ -45,8 +45,9 @@ class TestBoot:
             logging.error(f"烧录过程中发生异常: {str(e)}")
             download_success = False
 
+
         if download_success:
             logging.info("固件下载成功")
         else:
-            logging.error("固件下载失败")
+            logging.error("固件烧录失败")
             assert False, "固件烧录失败"

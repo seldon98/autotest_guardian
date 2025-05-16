@@ -144,8 +144,6 @@ class TestUpgrade:
             return False
 
 
-
-
     def test_execution(self, case_config):
 
         # 初始化设备连接

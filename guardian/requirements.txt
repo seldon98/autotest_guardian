@@ -5,4 +5,8 @@ PyYAML
 python-dotenv
 pyserial
 setuptools
+chardet
 uiautomator2
+PyYAML
+weditor
+setuptools
