@@ -217,10 +217,6 @@ class TestMotor:
 
         ports_lens_last = 0
 
-        hall_finished = False
-
-        button_firware_result_last_text = None
-        button_firware_result_last_color = None
 
         while True:
 
