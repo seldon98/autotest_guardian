@@ -37,7 +37,7 @@ OTA_DATA_INITIAL_PATH = "./case/xuitra/boot/esp32/test/ota_data_initial.bin"
 esp32_line = b''
 write_back_result = ""
 
-class TestMotor:
+class TestFullBurn:
 
 
     def read_line(self, serialEsp32):
