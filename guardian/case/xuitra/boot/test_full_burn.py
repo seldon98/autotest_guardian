@@ -23,9 +23,9 @@ from common.boot_base import ESP32Flasher
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # 宏定义：设置这些路径为当前目录下的某个子目录中的文件
 STABLE_FIRMWARE_FILE_PATH = ""
-STABLE_BOOTLOADER_FILE_PATH = "./case/xuitra/boot/release/bootloader.bin"
-STABLE_PARTITION_FILE_PATH = "./case/xuitra/boot/release/partitions.bin"
-STABLE_OTA_DATA_INITIAL_PATH = "./case/xuitra/boot/release/ota_data_initial.bin"
+STABLE_BOOTLOADER_FILE_PATH = "./case/xuitra/boot/base/bootloader.bin"
+STABLE_PARTITION_FILE_PATH = "./case/xuitra/boot/base/partitions.bin"
+STABLE_OTA_DATA_INITIAL_PATH = "./case/xuitra/boot/base/ota_data_initial.bin"
 
 
 esp32_line = b''
