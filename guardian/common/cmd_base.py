@@ -4,6 +4,7 @@ import platform
 
 
 class CommandExecutor:
+
     def __init__(self):
         self.encoding = 'gbk' if platform.system() == 'Windows' else 'utf-8'
 

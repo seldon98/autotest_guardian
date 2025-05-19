@@ -1,0 +1,7 @@
+# plan/XUItra/reboot.yaml
+test_cases:
+  - name: test_cold_reboot
+    loops: 1
+    module: reboot
+    product: xuitra
+    class: TestColdReboot  # 必须添加的字段（与测试类名匹配）

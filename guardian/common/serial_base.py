@@ -4,7 +4,7 @@ import time
 
 
 @allure.feature("串口通信测试")
-class TestSerialCommunication:
+class SerialCommunication:
     @allure.story("AT指令基础测试")
     @allure.severity(allure.severity_level.CRITICAL)
     def test_at_command_basic(self, case_config, serial_connection):
