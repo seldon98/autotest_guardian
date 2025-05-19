@@ -123,7 +123,7 @@ class TestComfortAssistance:
         element = d(
             className="android.view.View",
             packageName="com.hypershell.hypershell",
-            index=19  # 根据属性中的 index=18
+            index=18  # 根据属性中的 index=18
         )
 
         percentValue = d(

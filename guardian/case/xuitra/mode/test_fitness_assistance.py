@@ -138,7 +138,7 @@ class TestFitnessAssistance:
         element = d(
             className="android.view.View",
             packageName="com.hypershell.hypershell",
-            index=20  # 根据属性中的 index=18
+            index=19  # 根据属性中的 index=18
         )
 
         percentValue = d(

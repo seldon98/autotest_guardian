@@ -1,3 +1,4 @@
+import logging
 
 import serial
 import serial.tools.list_ports
@@ -22,7 +23,7 @@ class ESP32Flasher:
             ser = serial.Serial(self.port)
             ser.close()
         except Exception as e:
-            print(f"关闭串口失败: {e}")
+            logging.error(f"关闭串口失败: {e}")
 
         def run_esptool():
             try:
@@ -43,7 +44,7 @@ class ESP32Flasher:
                 ])
                 result[0] = True  # 表示成功
             except Exception as e:
-                print(f"固件烧录失败: {e}")
+                logging.error(f"固件烧录失败: {e}")
                 result[0] = False  # 表示失败
 
         thread = Thread(target=run_esptool)
@@ -52,12 +53,12 @@ class ESP32Flasher:
         thread.join()  # 等待线程完成
         end_time = time.time()  # 记录结束时间
         download_duration = end_time - start_time
-        print(f"固件下载时长: {download_duration:.2f} 秒")
+        logging.info(f"固件下载时长: {download_duration:.2f} 秒")
 
         # 检查结果
         if result[0]:
-            print("固件烧录成功！")
+            logging.info("固件烧录成功！")
         else:
-            print("固件烧录失败！")
+            logging.error("固件烧录失败！")
 
         return result[0]  # 返回成功与否的状态
