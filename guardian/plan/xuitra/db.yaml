@@ -1,5 +1,17 @@
 # plan/XUItra/db.yaml
 test_cases:
+  - name: test_bluetooth_connect
+    loops: 1
+    module: link
+    product: xuitra
+    class: TestBluetoothConnect  # 必须添加的字段（与测试类名匹配）
+
+  - name: test_upgrade
+    loops: 1
+    module: upgrade
+    product: xuitra
+    class: TestUpgrade
+
   - name: test_comfort_assistance
     loops: 1
     module: mode
@@ -11,3 +23,28 @@ test_cases:
     module: mode
     product: xuitra
     class: TestFitnessAssistance  # 必须添加的字段（与测试类名匹配）
+
+  - name: test_limit_assistance
+    loops: 1
+    module: mode
+    product: xuitra
+    class: TestLimitAssistance
+
+#  - name: test_cold_reboot
+#    loops: 1
+#    module: reboot
+#    product: xuitra
+#    class: TestColdReboot  # 必须添加的字段（与测试类名匹配）
+#
+#  - name: test_download_firmware
+#    loops: 1
+#    module: boot
+#    product: xuitra
+#    class: TestDownloadFirmware  # 必须添加的字段（与测试类名匹配）
+#
+#  - name: test_full_burn
+#    loops: 1
+#    module: boot
+#    product: xuitra
+#    class: TestFullBurn  # 必须添加的字段（与测试类名匹配）
+#

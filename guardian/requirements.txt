@@ -10,3 +10,5 @@ uiautomator2
 PyYAML
 weditor
 setuptools
+pytest
+esptool

@@ -9,12 +9,12 @@ target_path = rf"D:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{time
 os.makedirs(target_path, exist_ok=True)
 
 
-class TestFitnessAssistance:
+class TestLimitAssistance:
 
     def leftSwipeMin(self, d, element, percentValue):
         # 确保元素存在，否则滚动后重试
         if not element.exists():
-            d(scrollable=True).scroll.to(className="android.view.View", index=20) # 使用resourceId更可靠
+            d(scrollable=True).scroll.to(className="android.view.View", index=19) # 使用resourceId更可靠
             time.sleep(2)
             if not element.exists():
                 logging.error("元素未找到")
@@ -54,37 +54,37 @@ class TestFitnessAssistance:
         time.sleep(3)
 
         if d(description="取消").exists():
-            d.screenshot(
-                rf"D:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\DetectAnomalies.jpg")  # 修正路径
+            d.screenshot(rf"D:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\DetectAnomalies.jpg")  # 修正路径
             d(description="取消").click()
             logging.info("已点击取消按钮")
             time.sleep(2)
 
-        if d(description="健身").exists():
-            d(description="健身").click()
+        if d(description="极限").exists():
+            d(description="极限").click()
             time.sleep(2)
 
         if d(description="噢唷！").exists():
+            d.screenshot(rf"D:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\噢唷.jpg")
             d(description="取消").click()
             time.sleep(2)
 
     def test_execution(self):
-        logging.info("测试健身模式助力强度设置")
+        logging.info("测试极限模式助力强度设置")
         d = u2.connect('NAB0220730025203')
         self.perpare(d)
 
         # 使用resourceId或其他稳定属性定位元素
-        element = d(className="android.view.View", packageName="com.hypershell.hypershell",index="20")
-        percentValue = d(className="android.view.View", packageName="com.hypershell.hypershell",index="17")
+        element = d(className="android.view.View", packageName="com.hypershell.hypershell",index="19")
+        percentValue = d(className="android.view.View", packageName="com.hypershell.hypershell",index="16")
 
         logging.info("设置到最小强度1%")
         min_value = self.leftSwipeMin(d, element, percentValue)
         if min_value == "1":
             logging.info("成功设置到1%")
-            d.screenshot(os.path.join(target_path, "Fitness_MinValue_Success.jpg"))
+            d.screenshot(os.path.join(target_path, "Limit_MinValue_Success.jpg"))
         else:
             logging.error(f"设置到1%失败，当前值: {min_value}%")
-            d.screenshot(os.path.join(target_path, "Fitness_MinValue_Fail.jpg"))
+            d.screenshot(os.path.join(target_path, "Limit_MinValue_Fail.jpg"))
             assert False, "无法设置到最小助力强度"
 
         # 测试递增
@@ -110,4 +110,4 @@ class TestFitnessAssistance:
                 d.screenshot(os.path.join(target_path, f"{expected}%_Fail.jpg"))
                 assert False
 
-        logging.info("建设模式助力测试通过")
+        logging.info("极限模式助力测试通过")

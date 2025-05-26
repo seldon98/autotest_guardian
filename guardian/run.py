@@ -24,8 +24,8 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='repla
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
 
-reports_path = rf"E:\Jenkins\SWS_Git\autotest_guardian\guardian\reports\{args.timestamp}"
-temps_path = rf"E:\Jenkins\SWS_Git\autotest_guardian\guardian\temps\{args.timestamp}"
+reports_path = rf"D:\Jenkins\SWS_Git\autotest_guardian\guardian\reports\{args.timestamp}"
+temps_path = rf"D:\Jenkins\SWS_Git\autotest_guardian\guardian\temps\{args.timestamp}"
 
 os.makedirs(reports_path, exist_ok=True)
 os.makedirs(temps_path, exist_ok=True)
