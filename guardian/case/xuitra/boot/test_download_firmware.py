@@ -92,3 +92,13 @@ class TestDownloadFirmware:
         save_path = os.path.join(save_base_dir, "base")  # 请修改为你希望保存文件的路径
         self.download_firmware(url, save_path)
 
+        # 电机固件
+
+        url = "http://8.217.150.31:8090/webDevice/downloadFirmwareTest?type=1&firmwareType=2&randomString=Hypershell2024&index=0"
+        save_path = os.path.join(save_base_dir, "release")  # 请修改为你希望保存文件的路径
+        self.download_firmware(url, save_path)
+
+        url = "http://8.217.150.31:8090/webDevice/downloadFirmwareTest?type=1&firmwareType=2&randomString=Hypershell2024&index=1"
+        save_path = os.path.join(save_base_dir, "base")  # 请修改为你希望保存文件的路径
+        self.download_firmware(url, save_path)
+

@@ -9,6 +9,28 @@ timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
 # 指定目标路径（可以是绝对路径或相对路径）
 target_path = rf"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}"  # 替换为你的路径
+# 使用组合条件定位元素（优先）
+
+if element.exists():
+    # 方法1：直接点击元素
+    element.click()
+
+    # 方法2：滑动操作（根据 scrollable=True）
+    element.swipe("left", steps=100)  # 向左滑动
+
+    time.sleep(2)
+
+    element.swipe("left", steps=100)  # 向左滑动
+
+    time.sleep(2)
+
+    element.swipe("left", steps=100)  # 向左滑动
+
+    time.sleep(2)
+
+    le.info['contentDescription'] + "%")
+
+    return percentValue.info['contentDescription']
 
 # 创建文件夹（如果路径中的父目录不存在，会自动创建）
 os.makedirs(target_path, exist_ok=True)  # exist_ok=True 表示文件夹存在时不报错
@@ -17,28 +39,6 @@ os.makedirs(target_path, exist_ok=True)  # exist_ok=True 表示文件夹存在�
 class TestComfortAssistance:
 
     def leftSwipeMin(self, d, element, percentValue):
-        # 使用组合条件定位元素（优先）
-
-        if element.exists():
-            # 方法1：直接点击元素
-            element.click()
-
-            # 方法2：滑动操作（根据 scrollable=True）
-            element.swipe("left", steps=100)  # 向左滑动
-
-            time.sleep(2)
-
-            element.swipe("left", steps=100)  # 向左滑动
-
-            time.sleep(2)
-
-            element.swipe("left", steps=100)  # 向左滑动
-
-            time.sleep(2)
-
-            logging.info("助力强度为::"+percentValue.info['contentDescription']+"%")
-
-            return percentValue.info['contentDescription']
 
         else:
             logging.error("元素未找到，尝试滚动到可视区域")

@@ -82,7 +82,7 @@ message = {
                         "tag": "button",
                         "text": {
                             "tag": "lark_md",
-                            "content": "📄 查看 Allure 报告"
+                            "content": "📄 查看 burn 报告"
                         },
                         "url": rf"http://10.1.0.66:8083/job/XUItra/job/boot/HTML_20Report/",
                         "type": "primary",

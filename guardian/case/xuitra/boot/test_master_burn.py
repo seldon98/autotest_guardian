@@ -103,6 +103,6 @@ class TestMasterBurn:
             return False
 
     def test_execution(self, case_config):
-        assert self.burn_master("release"), "Release 固件烧录失败"
-        assert self.burn_master("base"), "Base 固件烧录失败"
+        assert self.burn_master("base"), "Release 固件烧录失败"
+        assert self.burn_master("release"), "Base 固件烧录失败"
 
