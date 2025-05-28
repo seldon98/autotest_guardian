@@ -7,7 +7,7 @@ import os
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
 # 指定目标路径（可以是绝对路径或相对路径）
-target_path = rf"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}"  # 替换为你的路径
+target_path = rf"D:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}"  # 替换为你的路径
 
 # 创建文件夹（如果路径中的父目录不存在，会自动创建）
 os.makedirs(target_path, exist_ok=True)  # exist_ok=True 表示文件夹存在时不报错
@@ -70,10 +70,8 @@ class TestUpgrade:
         time.sleep(3)
 
         if d(description="请在手机上保持蓝牙开启,并在更新时保持应用在前台").exists():
-            print("Enter the upgrade")
-        else:
-            print("Upgrade exception")
-            d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\logs\screen\upgradeFaile1_{timestamp}.jpg")  # 修正路径
+            logging.info("Enter the upgrade")
+
 
     def safe_print_description(self,desc):
         """安全打印包含特殊字符的描述信息"""
@@ -91,9 +89,7 @@ class TestUpgrade:
         :param duration_minutes: 监控持续时间（分钟）
         """
         end_time = datetime.now() + timedelta(minutes=duration_minutes)
-        print(f"开始监控，将持续到 {end_time.strftime('%H:%M:%S')}")
-
-        Flag = False
+        logging.info(f"开始监控，将持续到 {end_time.strftime('%H:%M:%S')}")
 
         while datetime.now() < end_time:
             try:
@@ -101,7 +97,7 @@ class TestUpgrade:
                 elements = d(className="android.view.View", packageName="com.hypershell.hypershell")
 
                 if not elements.exists:
-                    print("未找到目标元素")
+                    logging.info("未找到目标元素")
                     time.sleep(5)
                     continue
 
@@ -117,31 +113,24 @@ class TestUpgrade:
                     d.swipe(0.5, 0.8, 0.5, 0.2, 0.5)  # 从下往上滑动
 
                 # 间隔时间可配置化
-                time.sleep(3)  # 适当间隔避免高频请求
+                time.sleep(2)  # 适当间隔避免高频请求
 
                 if d(description="固件更新失败").exists():
-                    d.screenshot(fr"E:\Jenkins\SWS_Git\guardian\autotest_guardian\logs\screen\{timestamp}\pgradeFaile.jpg")
-                    break
+                    return False
 
                 if d(description="固件更新成功").exists():
                     logging.info("升级成功")
-                    d.screenshot(fr"E:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\upgradeSuccesss.jpg")
-                    Flag = True
-                    break
+                    return True
 
             except u2.exceptions.UiAutomationNotConnectedError:
                 print("设备连接丢失，尝试重连...")
                 d = u2.connect('NAB0220730025203')  # 自动重连设备
-            except Exception as e:
-                print(f"监控异常: {str(e)}")
-                time.sleep(5)
+                return False
 
-        print("监控周期结束")
+        logging.error("upgrade timeout !")
 
-        if Flag:
-            return True
-        else:
-            return False
+        return False
+
 
 
     def test_execution(self, case_config):
@@ -158,7 +147,7 @@ class TestUpgrade:
             time.sleep(10)
 
         if d(description="取消").exists():
-            d.screenshot(fr"E:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\DetectAnomalies.jpg")  # 修正路径
+            d.screenshot(fr"D:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\DetectAnomalies.jpg")  # 修正路径
             d(description="取消").click()
             print("已点击取消按钮")
 
@@ -168,8 +157,10 @@ class TestUpgrade:
         self.enter_upgrade(d)
 
 
-        if self.monitor_view_descriptions(d,duration_minutes=10):
+        if self.monitor_view_descriptions(d,duration_minutes=5):
             logging.info('upgrade success')
+            d.screenshot(fr"D:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\upgradeSuccesss.jpg")
         else:
             logging.error('upgrade faile')
+            d.screenshot(fr"D:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\pgradeFaile.jpg")
             assert  False

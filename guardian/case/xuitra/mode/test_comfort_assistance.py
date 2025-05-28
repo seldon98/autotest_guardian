@@ -4,178 +4,105 @@ import time
 from datetime import datetime
 import os
 
-
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-
-# 指定目标路径（可以是绝对路径或相对路径）
-target_path = rf"E:\Jenkins\SWS_Git\guardian\logs\screen\{timestamp}"  # 替换为你的路径
-# 使用组合条件定位元素（优先）
-
-if element.exists():
-    # 方法1：直接点击元素
-    element.click()
-
-    # 方法2：滑动操作（根据 scrollable=True）
-    element.swipe("left", steps=100)  # 向左滑动
-
-    time.sleep(2)
-
-    element.swipe("left", steps=100)  # 向左滑动
-
-    time.sleep(2)
-
-    element.swipe("left", steps=100)  # 向左滑动
-
-    time.sleep(2)
-
-    le.info['contentDescription'] + "%")
-
-    return percentValue.info['contentDescription']
-
-# 创建文件夹（如果路径中的父目录不存在，会自动创建）
-os.makedirs(target_path, exist_ok=True)  # exist_ok=True 表示文件夹存在时不报错
+target_path = rf"D:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}"
+os.makedirs(target_path, exist_ok=True)
 
 
 class TestComfortAssistance:
 
     def leftSwipeMin(self, d, element, percentValue):
+        # 确保元素存在，否则滚动后重试
+        if not element.exists():
+            d(scrollable=True).scroll.to(className="android.view.View", index=18) # 使用resourceId更可靠
+            time.sleep(2)
+            if not element.exists():
+                logging.error("元素未找到")
+                return "No"
 
-        else:
-            logging.error("元素未找到，尝试滚动到可视区域")
-            # 若元素在 ScrollView 中需要滚动
-            d(scrollable=True).scroll.to(className="android.view.View", index=18)
-            return "No"
+        element.click()
+        # 多次滑动确保到最小值
+        for _ in range(3):
+            element.swipe("left", steps=100)  # 调整steps更快滑动
+            time.sleep(1)
 
+        current_value = percentValue.info.get('contentDescription', '0').replace('%', '')
+        logging.info(f"当前助力强度: {current_value}%")
+        return current_value
 
     def leftSwipeDown(self, element, percentValue):
-
         element.click()
-
-        time.sleep(2)
-
-        # 方法2：滑动操作（根据 scrollable=True）
         element.swipe("left", steps=5)
-
-        time.sleep(2)
-
-        return percentValue.info['contentDescription']
-
+        time.sleep(1)
+        return percentValue.info.get('contentDescription', '0').replace('%', '')
 
     def rightSwipeUp(self, element, percentValue):
-
         element.click()
-
-        time.sleep(2)
-
-        # 方法2：滑动操作（根据 scrollable=True）
         element.swipe("right", steps=5)
-
-        time.sleep(2)
-
-        return percentValue.info['contentDescription']
-
-
+        time.sleep(1)
+        logging.info(percentValue.info.get('contentDescription', '0').replace('%', ''))
+        return percentValue.info.get('contentDescription', '0').replace('%', '')
 
     def perpare(self, d):
-
         d.app_stop('com.hypershell.hypershell')
-
         time.sleep(3)
-
         d.app_start('com.hypershell.hypershell')
-
         time.sleep(10)
 
-        # 获取屏幕尺寸
         width, height = d.window_size()
-
-        # 从屏幕中间 80% 位置下滑到中间 20% 位置（模拟手指下滑）
-        start_x = width * 0.5  # 横向中点
-        start_y = height * 0.8  # 纵向 80% 位置（靠近底部）
-        end_y = height * 0.2  # 纵向 20% 位置（靠近顶部）
-
-        # 执行滑动（duration 控制滑动速度，单位：秒）
-        d.swipe(start_x, start_y, start_x, end_y, duration=0.5)
-
+        d.swipe(width * 0.5, height * 0.8, width * 0.5, height * 0.2, duration=0.5)
         time.sleep(3)
 
         if d(description="取消").exists():
-            d.screenshot(fr"E:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\DetectAnomalies.jpg")  # 修正路径
+            d.screenshot(os.path.join(target_path, "DetectAnomalies.jpg"))
             d(description="取消").click()
-            logging.info("已点击取消按钮")
-            time.sleep(2)
+            logging.info("已取消异常提示")
 
         if d(description="舒适").exists():
             d(description="舒适").click()
             time.sleep(2)
 
-
-
     def test_execution(self):
-
-        logging.info("舒适模式下的助力设置")
-
+        logging.info("测试舒适模式助力强度设置")
         d = u2.connect('NAB0220730025203')
-
         self.perpare(d)
 
-        # 使用组合条件定位元素（优先）
-        element = d(
-            className="android.view.View",
-            packageName="com.hypershell.hypershell",
-            index=18  # 根据属性中的 index=18
-        )
+        # 使用resourceId或其他稳定属性定位元素
+        element = d(className="android.view.View", packageName="com.hypershell.hypershell",index="19")
+        percentValue = d(className="android.view.View", packageName="com.hypershell.hypershell",index="16")
 
-        percentValue = d(
-            className="android.view.View",
-            packageName="com.hypershell.hypershell",
-            index="16"
-        )
-
-        Flag  = True
-
-        logging.info("设置舒适模式助力强度至1%")
-        MinValue = self.leftSwipeMin(d, element, percentValue)
-
-        if MinValue == "No":
-            logging.error("助力设置至1%失败")
-            Flag = False
+        logging.info("设置到最小强度1%")
+        min_value = self.leftSwipeMin(d, element, percentValue)
+        if min_value == "1":
+            logging.info("成功设置到1%")
+            d.screenshot(os.path.join(target_path, "Eco_MinValue_Success.jpg"))
         else:
-            logging.info("当前助力强度为: " + str(MinValue) + "%")
+            logging.error(f"设置到1%失败，当前值: {min_value}%")
+            d.screenshot(os.path.join(target_path, "Eco_MinValue_Fail.jpg"))
+            assert False, "无法设置到最小助力强度"
 
-        i = 1
-
-        while i < 6:
-
-            logging.info("助力强度为:" + str(i * 20) + "%")
-
-            up = self.rightSwipeUp(element, percentValue)
-
-            if up  == str(i*20):
-                logging.info(up + "% 助力强度设置成功:")
+        # 测试递增
+        for i in range(1, 6):
+            expected = i * 20
+            actual = self.rightSwipeUp(element, percentValue)
+            if actual == str(expected):
+                logging.info(f"{expected}% 测试通过")
             else:
-                logging.error(str(i*20) + "% 助力强度设置失败")
-                d.screenshot(fr"E:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\{i * 20}%%_faile.jpg")
-                Flag = False
+                logging.error(f"{expected}% 测试失败，实际值: {actual}%")
+                d.screenshot(os.path.join(target_path, f"{expected}%_Fail.jpg"))
+                assert False
 
-            i = i + 1
-
-        i = 1
-
-        while i < 6:
-
-            up = self.leftSwipeDown(element, percentValue)
-            logging.info(up)
-            if up == str(100-i * 20) or (up=="1" and i ==5):
-                logging.info(up + "% 助力强度设置成功:")
+        # 测试递减
+        for i in range(1, 6):
+            expected = 100 - i * 20
+            expected = 1 if expected < 1 else expected  # 处理0%情况
+            actual = self.leftSwipeDown(element, percentValue)
+            if actual == str(expected):
+                logging.info(f"{expected}% 测试通过")
             else:
-                logging.error(str(100-i * 20) + "% 助力强度设置失败")
-                d.screenshot(fr"E:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\{100-(i*20)}%%_error.jpg")
-                Flag = False
-            i = i + 1
+                logging.error(f"期望 {expected}%，实际 {actual}%")
+                d.screenshot(os.path.join(target_path, f"{expected}%_Fail.jpg"))
+                assert False
 
-        if Flag:
-            logging.info("舒适模式助力强度设置测试通过")
-        else:
-            logging.error("舒适模式阻力强度设置测试异常")
-            assert False
+        logging.info("舒适模式主力模式测试通过")
+

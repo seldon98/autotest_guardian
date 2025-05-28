@@ -6,7 +6,7 @@ import os
 
 # 配置统一时间戳和路径
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-target_path = rf"E:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}"
+target_path = rf"D:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}"
 os.makedirs(target_path, exist_ok=True)
 
 
@@ -17,7 +17,7 @@ class TestBluetoothConnect:
     def disconnect(self, d):
         try:
             time.sleep(5)
-            d(description="number 2").click()
+            d(description="Hypershell").click()
             time.sleep(3)
         except Exception as e:
             d.screenshot(os.path.join(target_path, "Main_entrance_exception.jpg"))
@@ -62,12 +62,14 @@ class TestBluetoothConnect:
             timeout = 30
 
             while (datetime.now() - start_time).total_seconds() < timeout:
-                parent = d(description="number 2")  # 动态获取父节点
+                parent = d(description="Hypershell\nHypershell ProX")  # 动态获取父节点
+
+
                 if not parent.exists(): continue  # 增加存在性检查
 
                 icon = parent.child(
                     className="android.widget.ImageView",
-                    instance=2
+                    instance=1
                 )
                 try:
                     for _ in range(3):
@@ -89,7 +91,7 @@ class TestBluetoothConnect:
                         logging.info("connect success!")
                         return True
 
-                    if d(description="number 2").exists():
+                    if d(description="Hypershell").exists():
                         return True
 
                 except Exception as e:
@@ -115,7 +117,7 @@ class TestBluetoothConnect:
 
         if d(description="取消").exists():
             d.screenshot(
-                fr"E:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\DetectAnomalies.jpg")  # 修正路径
+                fr"D:\Jenkins\SWS_Git\autotest_guardian\guardian\logs\screen\{timestamp}\DetectAnomalies.jpg")  # 修正路径
             d(description="取消").click()
             print("已点击取消按钮")
 

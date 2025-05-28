@@ -11,3 +11,9 @@ test_cases:
     module: mode
     product: xuitra
     class: TestFitnessAssistance  # 必须添加的字段（与测试类名匹配）
+
+  - name: test_limit_assistance
+    loops: 1
+    module: mode
+    product: xuitra
+    class: TestLimitAssistance

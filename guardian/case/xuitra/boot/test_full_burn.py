@@ -225,7 +225,7 @@ class TestFullBurn:
                     isEsp32Available = 1
                     if isEsp32Connected == 0:
                         try:
-                            serialEsp32 = serial.Serial(p[0], 3000000, timeout=0.0)
+                            serialEsp32 = serial.Serial(p[0], 3000000, timeout=0.1)
                             serialEsp32.dtr = 0
                             serialEsp32.dtr = 1
                             logging.info("Esp32 conneted!")

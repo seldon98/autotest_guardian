@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # 全局串口对象
 ser = serial.Serial(
-    port='COM6',
+    port='COM3',
     baudrate=3000000,
     bytesize=serial.EIGHTBITS,
     parity=serial.PARITY_NONE,
@@ -117,6 +117,7 @@ class TestColdReboot:
             self.esp32_reset_by_dtr()
             self.read_boot_log(duration=3)
             self.find_esp32()
+            ser.close()
 
         except Exception as e:
             logging.error(f"测试执行异常: {e}")
