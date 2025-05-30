@@ -6,11 +6,11 @@ test_cases:
     product: xuitra
     class: TestDownloadFirmware  # 必须添加的字段（与测试类名匹配）
 #
-#  - name: test_master_burn
-#    loops: 1
-#    module: boot
-#    product: xuitra
-#    class: TestMasterBurn  # 必须添加的字段（与测试类名匹配）
+  - name: test_master_burn
+    loops: 1
+    module: boot
+    product: xuitra
+    class: TestMasterBurn  # 必须添加的字段（与测试类名匹配）
 #
 #  - name: test_motor_burn
 #    loops: 1

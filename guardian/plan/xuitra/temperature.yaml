@@ -1,0 +1,7 @@
+# plan/XUItra/boot.yaml
+test_cases:
+  - name: test_temperature_change
+    loops: 1
+    module: temperature
+    product: xuitra
+    class: TestTemperatureChange  # 必须添加的字段（与测试类名匹配）

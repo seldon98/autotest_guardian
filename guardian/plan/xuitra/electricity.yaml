@@ -1,0 +1,7 @@
+# plan/XUItra/boot.yaml
+test_cases:
+  - name: test_voltage_current_change
+    loops: 1
+    module: electricity
+    product: xuitra
+    class: TestVoltageCurrentChange # 必须添加的字段（与测试类名匹配）
