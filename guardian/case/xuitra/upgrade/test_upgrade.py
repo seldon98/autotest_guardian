@@ -3,6 +3,7 @@ import time
 from datetime import datetime, timedelta
 import logging
 import os
+from case.xuitra.boot.test_full_burn import TestFullBurn
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -18,7 +19,7 @@ class TestUpgrade:
     def enter_upgrade(self, d):
         # 点击 Hypershell 主入口
         time.sleep(5)
-        d(description="Hypershell").click()
+        d(description="Xuitra001").click()
         time.sleep(3)
 
         # 点击坐标位置（建议改用百分比或元素定位）
@@ -135,8 +136,14 @@ class TestUpgrade:
 
     def test_execution(self, case_config):
 
+        self.burn = TestFullBurn()
+
+        self.burn.test_excetion(case_config)
+
+        time.sleep(5)
+
         # 初始化设备连接
-        d = u2.connect('NAB0220730025203')
+        d = u2.connect('0A231FDD4001W9')
 
         d.app_stop('com.hypershell.hypershell')
 

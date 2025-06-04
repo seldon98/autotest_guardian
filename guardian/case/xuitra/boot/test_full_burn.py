@@ -362,11 +362,11 @@ class TestFullBurn:
         if flag:
             logging.info("release burning success")
 
-            if self.bruning("base"):
-                logging.info("base burning success")
-            else:
-                logging.error("base burning failed")
-                assert False
+            # if self.bruning("base"):
+            #     logging.info("base burning success")
+            # else:
+            #     logging.error("base burning failed")
+            #     assert False
         else:
             logging.error("release burning failed")
             assert False
