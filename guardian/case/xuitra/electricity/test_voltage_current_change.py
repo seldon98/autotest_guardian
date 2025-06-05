@@ -125,7 +125,7 @@ class TestVoltageCurrentChange:
         logging.info(f"图已保存：{out_path}")
 
     def test_execution(self, case_config=None):
-        log_file = "E:\\log\\COM10_2025_05_29.20.28.50.546.txt"
+        log_file = "E:\\log\\COM10_2025_05_30.18.27.50.514.txt"
         output_dir = rf".\\image\\{timestamp}"
         print(f"📄 日志路径: {log_file}")
         print(f"📂 图片输出目录: {output_dir}")

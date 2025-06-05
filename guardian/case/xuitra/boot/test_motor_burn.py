@@ -186,5 +186,5 @@ class TestMotorBurn:
 
     def test_execution(self):
         self.prepare()
-        assert self.burn("release"), "Release 电机固件烧录失败"
         assert self.burn("base"), "Base 电机固件烧录失败"
+        assert self.burn("release"), "Release 电机固件烧录失败"

@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # 全局串口对象
 ser = serial.Serial(
-    port='COM3',
+    port='COM14',
     baudrate=3000000,
     bytesize=serial.EIGHTBITS,
     parity=serial.PARITY_NONE,
@@ -106,6 +106,7 @@ class TestColdReboot:
             assert False
 
     def test_execution(self, case_config=None):
+
         try:
             if not ser.is_open:
                 ser.open()
@@ -122,3 +123,5 @@ class TestColdReboot:
         except Exception as e:
             logging.error(f"测试执行异常: {e}")
             assert False
+
+        time.sleep(5)
