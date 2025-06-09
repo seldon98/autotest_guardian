@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # 串口配置
 ser = serial.Serial(
-    port='COM14',  # 根据实际修改
+    port='COM5',  # 根据实际修改
     baudrate=3000000,
     bytesize=serial.EIGHTBITS,
     parity=serial.PARITY_NONE,
@@ -146,6 +146,6 @@ class TestTemperatureChange:
 
     def test_execution(self, case_config=None):
         logging.info("开始执行测试")
-        self.main_test(duration_seconds=60, sampling_interval=5)
+        self.main_test(duration_seconds=20*60, sampling_interval=5)
 
 
