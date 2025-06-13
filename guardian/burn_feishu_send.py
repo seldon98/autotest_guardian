@@ -7,6 +7,7 @@ import os
 build_number = os.getenv("BUILD_NUMBER")
 JOB_URL = sys.argv[1]
 TIMESTAMP = sys.argv[2]
+product = sys.argv[3]
 
 # 飞书按钮链接
 allure_report_url = f"{JOB_URL.rstrip('/')}/allure"
@@ -30,7 +31,7 @@ if os.path.exists(summary_path):
 else:
     print(f"[WARN] summary.json not found at: {summary_path}")
 
-url = 'https://open.feishu.cn/open-apis/bot/v2/hook/3d50eb4e-1db3-4e58-9b92-9d5c77fa9528'
+url = 'https://open.feishu.cn/open-apis/bot/v2/hook/448e22e1-b1cb-4b7b-ba01-fc7c73facf86'
 headers = {'Content-Type': 'application/json'}
 
 message = {
@@ -42,7 +43,7 @@ message = {
         },
         "header": {
             "title": {
-                "content": "🔥 烧录自动化测试完成",
+                "content": f"🔥 {product}烧录自动化测试完成",
                 "tag": "plain_text"
             },
             "template": "green" if failed == 0 else "red"
@@ -82,9 +83,9 @@ message = {
                         "tag": "button",
                         "text": {
                             "tag": "lark_md",
-                            "content": "📄 查看 burn 报告"
+                            "content": f"📄 查看 {product} 烧录测试报告"
                         },
-                        "url": rf"http://10.1.0.66:8083/job/XUItra/job/boot/HTML_20Report/",
+                        "url": rf"http://10.1.0.75:8080/job/Xuitra/job/boot/allure/",
                         "type": "primary",
                         "value": {}
                     }

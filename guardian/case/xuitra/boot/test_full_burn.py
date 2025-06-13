@@ -312,7 +312,7 @@ class TestFullBurn:
         return None
 
 
-    def bruning(self, masterboard):
+    def burn(self, masterboard):
 
         Flag = True
 
@@ -333,6 +333,7 @@ class TestFullBurn:
         directory_path = self.resource_path(masterboard)
         latest_file_esp = self.find_latest_version_file_esp(directory_path)
         STABLE_FIRMWARE_FILE_PATH = directory_path+rf'\{latest_file_esp}'
+        logging.info(STABLE_FIRMWARE_FILE_PATH)
 
         try:
             download_success = flasher.flash_firmware(
@@ -356,18 +357,8 @@ class TestFullBurn:
 
     def test_excetion(self, case_config):
 
+        assert self.burn("release"), "Release 固件烧录失败"
+        assert self.burn("base"), "base 固件烧录失败"
 
-        flag = self.bruning("release")
 
-        if flag:
-            logging.info("release burning success")
-
-            # if self.bruning("base"):
-            #     logging.info("base burning success")
-            # else:
-            #     logging.error("base burning failed")
-            #     assert False
-        else:
-            logging.error("release burning failed")
-            assert False
 

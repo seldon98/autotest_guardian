@@ -52,12 +52,14 @@ class TestMasterBurn:
             application_path = os.path.dirname(os.path.abspath(__file__))
         return os.path.join(application_path, relative_path)
 
+
+
     def get_base_firmware_paths(self):
         """返回基础 bootloader/partition/ota 的路径字典"""
         paths = {
-            "bootloader": self.resource_path("case/xuitra/boot/base/bootloader.bin"),
-            "partition": self.resource_path("case/xuitra/boot/base/partitions.bin"),
-            "ota": self.resource_path("case/xuitra/boot/base/ota_data_initial.bin"),
+            "bootloader": self.resource_path("base/bootloader.bin"),
+            "partition": self.resource_path("base/partitions.bin"),
+            "ota": self.resource_path("base/ota_data_initial.bin"),
         }
 
         for name, path in paths.items():
